@@ -849,7 +849,7 @@ class Converter(object):
                     if (
                         "rectanglelabels" in label
                         or 'rectangle' in label
-                        or 'labels' in label
+                        # or 'labels' in label
                     ):
                         xywh = self.rotated_rectangle(label)
                         if xywh is None:
