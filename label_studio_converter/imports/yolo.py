@@ -15,7 +15,8 @@ from urllib.request import (
 from label_studio_converter.utils import ExpandFullPath
 from label_studio_converter.imports.label_config import generate_label_config
 
-logger = logging.getLogger('root')
+# logger = logging.getLogger('root')
+from loguru import logger
 
 def get_data(input_dir, img_exts):
     get_labels = lambda files: list( filter(lambda fn: fn.endswith('.txt') and 'classes.txt' not in fn, files if type(files)==list else os.listdir(files)) )  
@@ -30,7 +31,7 @@ def get_data(input_dir, img_exts):
             [images.append(f'{dir_pth}/{img}') for img in dir_imgs]
         if len(dir_lbls) > 0:
             [labels.append(f'{dir_pth}/{lbl}') for lbl in dir_lbls]
-    for image, label in zip(images, labels):
+    for image, label in zip(sorted(images), sorted(labels)):
         if Path(image).stem == Path(label).stem:
             image_labels[image] = label
     return images, labels, image_labels
@@ -85,19 +86,20 @@ def convert_yolo_to_ls(
     # define directories
     # retrieve data (image and label paths). handles datasets with data in subdirectories, e.g. train / val / test
     images, labels, image_labels = get_data(input_dir, image_ext)
-    logger.info('Converting labels found recursively at %s', input_dir)
+    logger.warning(image_labels)
+    logger.info(f'Converting labels found recursively at {input_dir}')
     if yolo_type == 'polygonlabels':
         # verify if current labels are boxes
         # scan labels list for first non-empty label, peek contents, determine label type
         for label in labels:
-            with open(labels[0]) as f:
+            with open(label) as f:
                 sample_lbl = [line.strip() for line in f.readlines()]
             if len(sample_lbl) == 0:
                 continue
             else:
                 break   # non-empty label found
         logger.info(f'sample label: {sample_lbl}')
-        if len(sample_lbl) < 7: # Polygons expected to consist of 7 items. At least three x,y pairs + class 
+        if len(sample_lbl[0].split(' ')) < 7: # Polygons expected to consist of 7 items. At least three x,y pairs + class
             logger.info('Your labels are bounding boxes, but you requested polygons. Transforming labels from bboxes to polygons')
             polygonise_bboxes(input_dir, labels, out_type)
 
@@ -210,7 +212,7 @@ def convert_yolo_to_ls(
         tasks.append(task)
 
     if len(tasks) > 0:
-        logger.info('Saving Label Studio JSON to %s', out_file)
+        logger.info(f'Saving Label Studio JSON to {out_file}')
         with open(out_file, 'w') as out:
             json.dump(tasks, out)
 

@@ -1,0 +1,10 @@
+<View>
+  <Image name="image" value="$image"/>
+
+  <Header value="PolygonLabels"/>
+  <PolygonLabels name="label" toName="image"
+                    strokeWidth="3" pointSize="small"
+                    opacity="0.2">
+    <Label value="stripe" background="rgba(218, 1, 238, 1)"/>
+  </PolygonLabels>
+</View>
