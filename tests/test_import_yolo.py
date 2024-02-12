@@ -7,6 +7,7 @@ from label_studio_converter.imports import yolo as import_yolo
 
 # run as python -m tests.test_import_yolo
 os.makedirs(os.path.dirname(__file__)+'/../tmp/lsc-pytest',exist_ok=True)
+
 def test_base_import_yolo():
     """Tests generated config and json files for yolo imports
     test_import_yolo_data folder assumes only images in the 'images' folder
@@ -127,9 +128,12 @@ def test_base_import_yolo_with_img_dims():
         ls_data = json.loads(f.read())
 
     assert len(ls_data) == len(img_files), "some file imports did not succeed!"
+<<<<<<< HEAD
 
 
 if __name__ == '__main__':
     test_base_import_yolo()
     test_base_import_yolo_with_img_dims()
     test_base_import_yolo_seg()
+=======
+>>>>>>> 7deee93565b174a81adf37b2cb95baba3910c8b7
