@@ -2,6 +2,10 @@
 
 [Website](https://labelstud.io/) • [Docs](https://labelstud.io/guide) • [Twitter](https://twitter.com/heartexlabs) • [Join Slack Community <img src="https://app.heartex.ai/docs/images/slack-mini.png" width="18px"/>](https://slack.labelstud.io)
 
+## For AppMAIS purposes, reference the wiki for how this repository is used!
+
+[Link to the wiki](https://github.com/ASU-CS-Research/label-studio-converter/wiki)
+
 ## Table of Contents
 
 - [Introduction](#introduction)
