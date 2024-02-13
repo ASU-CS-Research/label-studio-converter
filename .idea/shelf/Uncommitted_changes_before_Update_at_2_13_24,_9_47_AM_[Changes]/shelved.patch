@@ -1,0 +1,101 @@
+Index: serve-data.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/serve-data.py b/serve-data.py
+new file mode 100644
+--- /dev/null	(date 1707770050000)
++++ b/serve-data.py	(date 1707770050000)
+@@ -0,0 +1,27 @@
++#!/usr/bin/env python3
++
++# It's python3 -m http.server PORT for a CORS world
++
++from http.server import HTTPServer, SimpleHTTPRequestHandler
++import sys
++
++
++class CORSRequestHandler(SimpleHTTPRequestHandler):
++
++    def end_headers(self):
++        self.send_header('Access-Control-Allow-Origin', 'http://localhost:8000')
++        self.send_header('Access-Control-Allow-Methods', '*')
++        self.send_header('Access-Control-Allow-Headers', '*')
++        self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate')
++        return super(CORSRequestHandler, self).end_headers()
++
++    def do_OPTIONS(self):
++        self.send_response(200)
++        self.end_headers()
++
++host = sys.argv[1] if len(sys.argv) > 2 else '0.0.0.0'
++port = int(sys.argv[len(sys.argv)-1]) if len(sys.argv) > 1 else 3030
++
++print("Listening on {}:{}".format(host, port))
++httpd = HTTPServer((host, port), CORSRequestHandler)
++httpd.serve_forever()
+Index: local_storage_to_hosting.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/local_storage_to_hosting.py b/local_storage_to_hosting.py
+new file mode 100644
+--- /dev/null	(date 1707834728000)
++++ b/local_storage_to_hosting.py	(date 1707834728000)
+@@ -0,0 +1,25 @@
++import os
++import json
++
++
++PORT = 3031
++FILEPATH = os.path.abspath('./outputs/yolo_seg.json')
++
++REPLACEMENTS = {
++    '/data/local-files/?d=': f'http://localhost:{PORT}',
++    '@': '%40'
++}
++
++# Sample output: Load the file from the filepath and print out the first object
++new_data = []
++with open(FILEPATH, 'r') as f:
++    data = json.load(f)
++    for obj in data:
++        for key in REPLACEMENTS:
++            obj['data']['image'] = obj['data']['image'].replace(key, REPLACEMENTS[key])
++        # print(obj['data']['image'])
++        new_data.append(obj)
++# Save the new data to the same file location, appending the port number to the filename
++with open(FILEPATH.replace('.json', f'_{PORT}.json'), 'w') as f:
++    json.dump(new_data, f)
++
+Index: label_studio_converter/yolo_import.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/label_studio_converter/yolo_import.py b/label_studio_converter/yolo_import.py
+new file mode 100644
+--- /dev/null	(date 1707835619136)
++++ b/label_studio_converter/yolo_import.py	(date 1707835619136)
+@@ -0,0 +1,19 @@
++import os
++from label_studio_converter.imports import yolo as import_yolo
++
++
++INPUT_DATA_DIR = os.path.abspath('/home/bee/stripe-segmentation/train')
++if not os.path.exists(INPUT_DATA_DIR):
++    print(f'input_data_dir: {INPUT_DATA_DIR} does not exist!')
++    exit(1)
++
++output_data_file = os.path.abspath('./outputs/yolo_seg.json')
++image_ext = '.png'
++
++import_yolo.convert_yolo_to_ls(
++    input_dir=INPUT_DATA_DIR,
++    out_file=output_data_file,
++    image_ext=image_ext,
++    yolo_type="polygonlabels"
++)
++
