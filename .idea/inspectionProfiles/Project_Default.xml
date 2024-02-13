@@ -13,7 +13,11 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
+<<<<<<< HEAD
           <list size="37">
+=======
+          <list size="33">
+>>>>>>> 30758522eec0b7f1fc75f7537b1e459aee3619c3
             <item index="0" class="java.lang.String" itemvalue="joblib" />
             <item index="1" class="java.lang.String" itemvalue="threadpoolctl" />
             <item index="2" class="java.lang.String" itemvalue="opencv-python" />
@@ -47,10 +51,13 @@
             <item index="30" class="java.lang.String" itemvalue="pandas" />
             <item index="31" class="java.lang.String" itemvalue="seaborn" />
             <item index="32" class="java.lang.String" itemvalue="requests" />
+<<<<<<< HEAD
             <item index="33" class="java.lang.String" itemvalue="nltk" />
             <item index="34" class="java.lang.String" itemvalue="ijson" />
             <item index="35" class="java.lang.String" itemvalue="label-studio-tools" />
             <item index="36" class="java.lang.String" itemvalue="ujson" />
+=======
+>>>>>>> 30758522eec0b7f1fc75f7537b1e459aee3619c3
           </list>
         </value>
       </option>
