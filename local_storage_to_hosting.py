@@ -39,9 +39,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
     port_num = args.port
     path_to_ls_annotations = args.lsannotations
+    path_to_images_directory = args.filepath
+    if path_to_images_directory != '' and path_to_images_directory[0] != '/':
+        path_to_images_directory = '/' + path_to_images_directory
+    if path_to_images_directory != '' and path_to_images_directory[-1] == '/':
+        path_to_images_directory = path_to_images_directory[:-1]
 
     replacement_strings = {
-        '/data/local-files/?d=': f'http://localhost:{port_num}/{path_to_images_directory}',
+        '/data/local-files/?d=': f'http://localhost:{port_num}{path_to_images_directory}',
         '@': '%40'
     }
 
