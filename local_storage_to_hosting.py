@@ -3,8 +3,6 @@ import json
 import argparse
 
 
-
-
 def local_storage_to_hosting(port, filepath, replacements):
 
     # Sample output: Load the file from the filepath and print out the first object
@@ -20,22 +18,30 @@ def local_storage_to_hosting(port, filepath, replacements):
     with open(filepath.replace('.json', f'_{port}.json'), 'w') as f:
         json.dump(new_data, f)
 
+
 if __name__ == "__main__":
     port_num = 3030
     path_to_ls_annotations = os.path.abspath('./outputs/yolo_seg.json')
+    path_to_images_directory = ''  # Empty string if the images are located at localhost:port_num with no path
     # Accept the port and filepath as arguments (-p and -f)
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--port', type=int, help='Port number to replace in the local storage path',
+    parser.add_argument('-p', '--port', type=int,
+                        help='Port number to replace in the local storage path',
                         default=port_num)
-    parser.add_argument('-f', '--filepath', type=str, help='Path to the Label Studio annotations file',
+    parser.add_argument('-ls', '--lsannotations', type=str,
+                        help='Path to the Label Studio annotations file',
                         default=path_to_ls_annotations)
+    parser.add_argument('-fp', '--filepath', type=str,
+                        help='relative path from the root of the source files to the images directory'
+                             ' (e.g. if serve-data.py is run from ~/data, and the images are in ~/data/yolo/images,'
+                             ' the relative path is "yolo/images"',
+                        default=path_to_images_directory)
     args = parser.parse_args()
     port_num = args.port
-    path_to_ls_annotations = args.filepath
-
+    path_to_ls_annotations = args.lsannotations
 
     replacement_strings = {
-        '/data/local-files/?d=': f'http://localhost:{port_num}',
+        '/data/local-files/?d=': f'http://localhost:{port_num}/{path_to_images_directory}',
         '@': '%40'
     }
 
