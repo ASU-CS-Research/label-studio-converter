@@ -23,7 +23,7 @@ if __name__ == "__main__":
     port_num = 3030
     path_to_ls_annotations = os.path.abspath('./outputs/yolo_seg.json')
     path_to_images_directory = ''  # Empty string if the images are located at localhost:port_num with no path
-    # Accept the port and filepath as arguments (-p and -f)
+
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--port', type=int,
                         help='Port number to replace in the local storage path',
