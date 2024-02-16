@@ -33,8 +33,8 @@ def yolo_import(input_data_dir: str, output_filepath: str, yolo_type: str, image
 
 if __name__ == '__main__':
     input_data_directory = os.path.abspath('/home/bee/stripe-segmentation/test')
-    yolo_annotations_type = accepted_yolo_annotation_types[1]
-    image_extensions = '.png'
+    yolo_annotations_type = ACCEPTED_YOLO_ANNOTATION_TYPES[1]
+    image_extensions = '.jpg,.jpeg,.png'
     output_data_file = os.path.abspath('./outputs/yolo.json')
     # Accept the above four parameters as arguments (-i, -o, -y, -e)
     parser = argparse.ArgumentParser()
@@ -44,10 +44,10 @@ if __name__ == '__main__':
                         help='Path to an output file. This file must not already exist, and must be a json file.',
                         default=output_data_file)
     parser.add_argument('-y', '--yolo-type', type=str,
-                        help=f'Type of YOLO annotations, any of: {accepted_yolo_annotation_types}',
+                        help=f'Type of YOLO annotations, any of: {ACCEPTED_YOLO_ANNOTATION_TYPES}',
                         default=yolo_annotations_type)
-    parser.add_argument('-e', '--image-ext', type=str, help='Image extension to search as a comma '
-                                                            'separated string, e.g. ".jpg,.jpeg,.png"',
+    parser.add_argument('-e', '--image-ext', type=str, help=f'Image extension to search as a comma '
+                                                            f'separated string, e.g. "{image_extensions}"',
                         default=image_extensions)
     args = parser.parse_args()
     input_data_directory = args.input
